@@ -1,0 +1,21 @@
+@import '../../variables.scss';
+
+.header {
+  display: flex;
+  justify-content: center;
+  background-color: $background-color-header;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1170px;
+    margin: 13px 16px;
+  }
+
+  &__box-button {
+    display: flex;
+    gap: 10px
+  }
+}
