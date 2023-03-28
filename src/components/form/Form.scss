@@ -1,0 +1,46 @@
+@import '../../variables.scss';
+.form {
+  background-color: $background-color;
+  text-align: center;
+  padding: 140px 16px 0;
+
+  &__title {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 40px;
+    color: $card-text-color;
+    margin-bottom: 50px;
+  }
+
+  &__subtitle {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    color: $card-text-color;
+    margin-bottom: 11px;
+  }
+  
+  &__button-upload {
+    width: 108px;
+    height: 54px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border: solid 1px $card-text-color;
+    text-align: center;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__box-upload {
+    display: flex;
+  }
+  
+  &__text-button {
+    line-height: 54px;
+  }
+}

@@ -8,7 +8,7 @@ export const Header = () => {
     console.log('Button clicked!');
   };
 
-  const handleClickRtnSignUp = () => {
+  const handleClickBtnSignUp = () => {
     console.log('Button clicked!');
   };
   return (
@@ -23,7 +23,7 @@ export const Header = () => {
           />
           <Button
             type="button"
-            onClick={handleClickRtnSignUp}
+            onClick={handleClickBtnSignUp}
             name="Sign up"
           />
         </div>

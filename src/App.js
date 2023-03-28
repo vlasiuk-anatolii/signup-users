@@ -3,6 +3,7 @@ import './App.scss';
 import { Assigment } from './components/assigment/Assigment';
 import { Header } from './components/header/Header';
 import { List } from './components/list/List';
+import { Form } from './components/form/Form';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Header />
       <Assigment />
       <List />
+      <Form />
     </div>
   );
 }

@@ -52,7 +52,7 @@ export const List = () => {
       )}
       </div >
       <Button 
-        type="button"
+        type='button'
         onClick={handleClickBtnShowMore}
         name='Show more'
         width='120px'
