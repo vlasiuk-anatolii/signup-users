@@ -1,0 +1,47 @@
+@import '../../variables.scss';
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  &__box-image {
+    
+  }
+
+  &__image{
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  &__name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  &__email, &__phone {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  &__occupation {
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+}
+
+
+
+
