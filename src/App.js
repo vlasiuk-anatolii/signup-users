@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.scss';
 import { Assigment } from './components/assigment/Assigment';
 import { Header } from './components/header/Header';

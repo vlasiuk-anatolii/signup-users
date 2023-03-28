@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './List.scss';
 import { Card } from '../card/Card';
+import { Button } from '../button/Button';
 import { getPeople } from '../../api';
 
 export const List = () => {
   const [people, setPeople] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const handleClickBtnShowMore = () => {
+    console.log('Button clicked!');
+  };
+
   useEffect(() => {
     async function fetchPeople() {
       setIsLoading(true);
@@ -30,17 +36,27 @@ export const List = () => {
   }
 
   return (
-    <div className="card">
+    <div className="list">
+      <h1 className="list__title">Working with GET request</h1>
+      <div className="list__box-cards">
       {people.map(person =>
-      <Card
-        key={person.id}
-        image={person.photo}
-        name={person.name}
-        occupation={person.position}
-        email={person.email}
-        phone={person.phone}
-      />
+        <Card
+          key={person.id}
+          image={person.photo}
+          name={person.name}
+          occupation={person.position}
+          email={person.email}
+          phone={person.phone}
+        />
+      
       )}
+      </div >
+      <Button 
+        type="button"
+        onClick={handleClickBtnShowMore}
+        name='Show more'
+        width='120px'
+      />
     </div>
   );
 };
