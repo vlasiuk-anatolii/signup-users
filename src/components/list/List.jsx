@@ -6,7 +6,7 @@ import { getPeople } from '../../api';
 import { Loader } from '../loader/Loader';
 import PropTypes from 'prop-types';
 
-export const List = ({ isRegistered, elementRefList }) => {
+export const List = React.memo(({ isRegistered, elementRefList }) => {
   const [people, setPeople] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -74,15 +74,16 @@ export const List = ({ isRegistered, elementRefList }) => {
       )}
     </div>
   );
-};
+});
 
+List.displayName = 'List';
 List.propTypes = {
   isRegistered: PropTypes.bool,
   elementRef: PropTypes.shape({
-    current: PropTypes.any
+    current: PropTypes.object
   }),
   elementRefList: PropTypes.shape({
-    current: PropTypes.any
+    current: PropTypes.object
   })
 };
 

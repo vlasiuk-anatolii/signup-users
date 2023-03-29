@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const Card = ({ image, name, occupation, email, phone }) => {
+export const Card = React.memo(({ image, name, occupation, email, phone }) => {
   const classes = useStyles();
   return (
     <div className="card">
@@ -37,8 +37,8 @@ export const Card = ({ image, name, occupation, email, phone }) => {
       </div>
     </div>
   );
-};
-
+});
+Card.displayName = 'Card';
 Card.propTypes = {
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

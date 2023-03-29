@@ -3,7 +3,7 @@ import { Button } from '../button/Button';
 import './Assigment.scss';
 import PropTypes from 'prop-types';
 
-export const Assigment = ({ elementRef }) => {
+export const Assigment = React.memo(({ elementRef }) => {
   const handleClickBtnSignUp = () => {
     if (elementRef.current) {
       elementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -24,8 +24,9 @@ export const Assigment = ({ elementRef }) => {
       </div>
     </div >
   );
-};
+});
 
+Assigment.displayName = 'Assigment';
 Assigment.propTypes = {
   elementRef: PropTypes.shape({
     current: PropTypes.any

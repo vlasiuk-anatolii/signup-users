@@ -33,7 +33,7 @@ function validateValue(value, str) {
   return re.test(value);
 }
 
-export const Form = ({ setIsRegistered, elementRef }) => {
+export const Form = React.memo(({ setIsRegistered, elementRef }) => {
   const [position, setPosition] = React.useState('');
   const [name, setName] = React.useState('');
   const [errorName, setErrorName] = React.useState(false);
@@ -265,15 +265,15 @@ export const Form = ({ setIsRegistered, elementRef }) => {
             </ThemeProvider>
           </Box>
         </Modal>
-
       </div>
     </>
   );
-};
+});
 
+Form.displayName = 'Form';
 Form.propTypes = {
   setIsRegistered: PropTypes.func,
   elementRef: PropTypes.shape({
-    current: PropTypes.any
+    current: PropTypes.object
   })
 };

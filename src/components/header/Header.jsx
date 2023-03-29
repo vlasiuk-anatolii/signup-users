@@ -39,9 +39,9 @@ export const Header = ({ elementRef, elementRefList }) => {
 
 Header.propTypes = {
   elementRef: PropTypes.shape({
-    current: PropTypes.any
+    current: PropTypes.object
   }),
   elementRefList: PropTypes.shape({
-    current: PropTypes.any
+    current: PropTypes.object
   })
 };
