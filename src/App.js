@@ -8,11 +8,12 @@ import { Form } from './components/form/Form';
 function App() {
   const [isRegistered, setIsRegistered] = React.useState(false);
   const elementRef = React.useRef(null);
+  const elementRefList = React.useRef(null);
   return (
     <div className="app">
-      <Header elementRef={elementRef} />
+      <Header elementRef={elementRef} elementRefList={elementRefList} />
       <Assigment elementRef={elementRef} />
-      <List isRegistered={isRegistered} />
+      <List isRegistered={isRegistered} elementRefList={elementRefList} />
       <Form setIsRegistered={setIsRegistered} elementRef={elementRef} />
     </div>
   );

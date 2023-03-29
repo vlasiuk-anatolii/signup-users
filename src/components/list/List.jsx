@@ -6,14 +6,15 @@ import { getPeople } from '../../api';
 import { Loader } from '../loader/Loader';
 import PropTypes from 'prop-types';
 
-export const List = ({ isRegistered }) => {
+export const List = ({ isRegistered, elementRefList }) => {
   const [people, setPeople] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [count] = useState(6);
   const [totalPages, setTotalPages] = useState(null);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
+
   async function handleClickBtnShowMore() {
     if (currentPage === totalPages - 1) {
       setIsButtonVisible(false);
@@ -43,20 +44,14 @@ export const List = ({ isRegistered }) => {
       }
       setIsLoading(false);
     }
-    fetchPeople();
+   fetchPeople();
   }, [isRegistered]);
 
-  if (isLoading) {
-    return <div><Loader /></div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
-    <div className="list">
+    <div ref={elementRefList} className="list">
       <h1 className="list__title">Working with GET request</h1>
+      { isLoading && <Loader /> }
+      { error && <div>Error: {error}</div> }
       <div className="list__box-cards">
         {people.map(person =>
           <Card
@@ -83,5 +78,11 @@ export const List = ({ isRegistered }) => {
 
 List.propTypes = {
   isRegistered: PropTypes.bool,
+  elementRef: PropTypes.shape({
+    current: PropTypes.any
+  }),
+  elementRefList: PropTypes.shape({
+    current: PropTypes.any
+  })
 };
 

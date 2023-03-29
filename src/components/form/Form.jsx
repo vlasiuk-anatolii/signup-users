@@ -9,7 +9,9 @@ import Modal from '@mui/material/Modal';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
 import { Button } from '../button/Button';
+import { Loader } from '../loader/Loader';
 import { REGEX } from '../../consts/const';
+import SuccessImg from '../../assets/images/success-image.svg';
 import PropTypes from 'prop-types';
 import { getToken, signUpUser, getPositions } from '../../api';
 import {
@@ -160,18 +162,12 @@ export const Form = ({ setIsRegistered, elementRef }) => {
     fetchPositions();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (errorPositions) {
-    return <div>Error: {errorPositions}</div>;
-  }
-
   return (
     <>
       <form ref={elementRef} className='form' onSubmit={handleSubmit}>
         <h1 className='form__title'>Working with POST request</h1>
+        { isLoading && <Loader /> }
+        { errorPositions && <div>Error: {errorPositions}</div> }
         <ThemeProvider theme={theme}>
           <Box sx={styledBox}>
             <TextField
@@ -212,13 +208,14 @@ export const Form = ({ setIsRegistered, elementRef }) => {
               >
                 {!errorPositions && (
                   positions.map(position => {
-                    return(
-                    <FormControlLabel
-                      value={position.id}
-                      control={<Radio style={styledRadio} />}
-                      label={position.name}
-                      sx={styledFormControlLabel} />
-                  )}))}
+                    return (
+                      <FormControlLabel
+                        value={position.id}
+                        control={<Radio style={styledRadio} />}
+                        label={position.name}
+                        sx={styledFormControlLabel} />
+                    )
+                  }))}
                 <p className='form__error-radio'>{!position && 'Should choose a position!'}</p>
               </RadioGroup>
             </div>
@@ -257,18 +254,18 @@ export const Form = ({ setIsRegistered, elementRef }) => {
         <Modal
           open={openModal}
           onClose={handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+          aria-labelledby='modal-modal-title'
         >
           <Box sx={styledBoxModal}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            <ThemeProvider theme={theme}>
+              <Typography id='modal-modal-title' sx={{ fontSize: '40px', textAlign: 'center' }}>
+                User successfully registered
+              </Typography>
+              <img className='form__success-img' src={SuccessImg} alt='Success' />
+            </ThemeProvider>
           </Box>
         </Modal>
+
       </div>
     </>
   );

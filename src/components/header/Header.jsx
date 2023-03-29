@@ -4,9 +4,11 @@ import './Header.scss';
 import Logo from '../../assets/images/Logo.svg';
 import PropTypes from 'prop-types';
 
-export const Header = ({ elementRef }) => {
+export const Header = ({ elementRef, elementRefList }) => {
   const handleClickBtnUsers = () => {
-    console.log('Button clicked!');
+    if (elementRefList.current) {
+      elementRefList.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const handleClickBtnSignUp = () => {
@@ -17,7 +19,7 @@ export const Header = ({ elementRef }) => {
   return (
     <div className='header'>
       <div className='header__container'>
-        <img src={Logo} alt="Logo" />
+        <img src={Logo} alt='Logo' />
         <div className='header__box-button'>
           <Button
             type="button"
@@ -37,6 +39,9 @@ export const Header = ({ elementRef }) => {
 
 Header.propTypes = {
   elementRef: PropTypes.shape({
+    current: PropTypes.any
+  }),
+  elementRefList: PropTypes.shape({
     current: PropTypes.any
   })
 };
