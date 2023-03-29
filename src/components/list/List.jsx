@@ -3,6 +3,7 @@ import './List.scss';
 import { Card } from '../card/Card';
 import { Button } from '../button/Button';
 import { getPeople } from '../../api';
+import { INITIAL_ITEMS_PER_PAGE, INITIAL_PAGE } from '../../consts/const';
 import { Loader } from '../loader/Loader';
 import PropTypes from 'prop-types';
 
@@ -10,8 +11,8 @@ export const List = React.memo(({ isRegistered, elementRefList }) => {
   const [people, setPeople] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [count] = useState(6);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [count] = useState(INITIAL_ITEMS_PER_PAGE);
   const [totalPages, setTotalPages] = useState(null);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
 
@@ -35,7 +36,7 @@ export const List = React.memo(({ isRegistered, elementRefList }) => {
   useEffect(() => {
     async function fetchPeople() {
       setIsLoading(true);
-      const { success, total_pages, users, message } = await getPeople(1, 6);
+      const { success, total_pages, users, message } = await getPeople(INITIAL_PAGE, INITIAL_ITEMS_PER_PAGE);
       if (success) {
         setPeople(users);
         setTotalPages(total_pages);

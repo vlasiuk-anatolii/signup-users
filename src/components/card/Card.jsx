@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
@@ -24,13 +24,13 @@ export const Card = React.memo(({ image, name, occupation, email, phone }) => {
         <img src={image} alt={name} className="card__image" />
       </div>
       <div className="card__info">
-        <Tooltip classes={classes} describeChild title={`${name}`}>
+        <Tooltip classes={classes} title={`${name}`}>
           <h2 className="card__name">{getTrim(name, MAX_LENGTH_TEXT)}</h2>
         </Tooltip>
-        <Tooltip classes={classes} describeChild title={`${occupation}`}>
+        <Tooltip classes={classes} title={`${occupation}`}>
           <p className="card__occupation">{getTrim(occupation, MAX_LENGTH_TEXT)}</p>
         </Tooltip>
-        <Tooltip classes={classes} describeChild title={`${email}`}>
+        <Tooltip classes={classes} title={`${email}`}>
           <p className="card__email">{getTrim(email, MAX_LENGTH_TEXT)}</p>
         </Tooltip>
         <p className="card__phone">{phone}</p>

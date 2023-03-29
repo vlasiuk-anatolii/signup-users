@@ -9,6 +9,8 @@ export const FONT_SIZE = 16;
 export const MAX_LENGTH_TEXT = 25;
 export const FONT_WEIGHT = 400;
 export const LINE_HEIGHT = '26px';
+export const INITIAL_PAGE = 1;
+export const INITIAL_ITEMS_PER_PAGE = 6;
 export const REGEX = {
   // eslint-disable-next-line no-useless-escape
   EMAIL: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
