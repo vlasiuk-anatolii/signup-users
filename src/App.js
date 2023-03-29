@@ -6,14 +6,17 @@ import { List } from './components/list/List';
 import { Form } from './components/form/Form';
 
 function App() {
+  const [isRegistered, setIsRegistered] = React.useState(false);
+  const elementRef = React.useRef(null);
   return (
-    <div className="App">
-      <Header />
-      <Assigment />
-      <List />
-      <Form />
+    <div className="app">
+      <Header elementRef={elementRef} />
+      <Assigment elementRef={elementRef} />
+      <List isRegistered={isRegistered} />
+      <Form setIsRegistered={setIsRegistered} elementRef={elementRef} />
     </div>
   );
 }
+
 
 export default App;

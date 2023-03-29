@@ -2,14 +2,17 @@ import React from 'react';
 import { Button } from '../button/Button';
 import './Header.scss';
 import Logo from '../../assets/images/Logo.svg';
+import PropTypes from 'prop-types';
 
-export const Header = () => {
+export const Header = ({ elementRef }) => {
   const handleClickBtnUsers = () => {
     console.log('Button clicked!');
   };
 
   const handleClickBtnSignUp = () => {
-    console.log('Button clicked!');
+    if (elementRef.current) {
+      elementRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
   return (
     <div className='header'>
@@ -30,4 +33,10 @@ export const Header = () => {
       </div>
     </div >
   );
+};
+
+Header.propTypes = {
+  elementRef: PropTypes.shape({
+    current: PropTypes.any
+  })
 };

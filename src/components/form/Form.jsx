@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
 import { Button } from '../button/Button';
 import { REGEX } from '../../consts/const';
+import PropTypes from 'prop-types';
 import { getToken, signUpUser, getPositions } from '../../api';
 import {
   styledTextField,
@@ -30,7 +31,7 @@ function validateValue(value, str) {
   return re.test(value);
 }
 
-export const Form = () => {
+export const Form = ({ setIsRegistered, elementRef }) => {
   const [position, setPosition] = React.useState('');
   const [name, setName] = React.useState('');
   const [errorName, setErrorName] = React.useState(false);
@@ -130,7 +131,6 @@ export const Form = () => {
     formData.append('photo', file);
 
     const isRegistered = await signUpUser(formData, token);
-    console.log('isRegistered', isRegistered);
     if (isRegistered.ok) {
       handleOpenModal();
       setPosition('');
@@ -139,6 +139,7 @@ export const Form = () => {
       setPhone('');
       setFileName('');
       setFile('');
+      setIsRegistered(true);
     }
   }
 
@@ -169,7 +170,7 @@ export const Form = () => {
 
   return (
     <>
-      <form className='form' onSubmit={handleSubmit}>
+      <form ref={elementRef} className='form' onSubmit={handleSubmit}>
         <h1 className='form__title'>Working with POST request</h1>
         <ThemeProvider theme={theme}>
           <Box sx={styledBox}>
@@ -253,7 +254,6 @@ export const Form = () => {
         </ThemeProvider>
       </form>
       <div>
-        {/* <Button onClick={handleOpenModal}>Open modal</Button> */}
         <Modal
           open={openModal}
           onClose={handleCloseModal}
@@ -272,4 +272,11 @@ export const Form = () => {
       </div>
     </>
   );
+};
+
+Form.propTypes = {
+  setIsRegistered: PropTypes.func,
+  elementRef: PropTypes.shape({
+    current: PropTypes.any
+  })
 };

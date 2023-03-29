@@ -3,17 +3,16 @@ import './List.scss';
 import { Card } from '../card/Card';
 import { Button } from '../button/Button';
 import { getPeople } from '../../api';
+import PropTypes from 'prop-types';
 
-export const List = () => {
+export const List = ({ isRegistered }) => {
   const [people, setPeople] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(null);
   const [count] = useState(6);
   const [totalPages, setTotalPages] = useState(null);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
-  console.log('currentPage', currentPage);
-  console.log('totalPages', totalPages);
   async function handleClickBtnShowMore() {
     if (currentPage === totalPages - 1) {
       setIsButtonVisible(false);
@@ -22,7 +21,7 @@ export const List = () => {
     const nextPage = currentPage + 1;
     const { success, total_pages, users } = await getPeople(nextPage, count);
     if (success) {
-      setPeople(users);
+      setPeople([...people, ...users]);
       setTotalPages(total_pages);
       setCurrentPage(nextPage);
     } else {
@@ -34,17 +33,17 @@ export const List = () => {
   useEffect(() => {
     async function fetchPeople() {
       setIsLoading(true);
-      const { success, total_pages, users } = await getPeople(currentPage, count);
+      const { success, total_pages, users, message } = await getPeople(1, 6);
       if (success) {
         setPeople(users);
         setTotalPages(total_pages);
       } else {
-        setError('Something went wrong');
+        setError(message);
       }
       setIsLoading(false);
     }
     fetchPeople();
-  }, []);
+  }, [isRegistered]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -67,7 +66,6 @@ export const List = () => {
             email={person.email}
             phone={person.phone}
           />
-
         )}
       </div >
       {isButtonVisible && (
@@ -81,3 +79,8 @@ export const List = () => {
     </div>
   );
 };
+
+List.propTypes = {
+  isRegistered: PropTypes.bool,
+};
+
