@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
 import { Button } from '../button/Button';
 import { REGEX } from '../../consts/const';
-import { getToken, signUpUser } from '../../api';
+import { getToken, signUpUser, getPositions } from '../../api';
 import {
   styledTextField,
   themeTypography,
@@ -20,8 +20,8 @@ import {
   styledRadioGroup,
   styledRadio,
   styledFormControlLabel,
-  styledFormControlLabelQa,
-  styledBoxModal
+  styledBoxModal,
+  styledCustomTextField
 } from './Form.styled'
 import './Form.scss';
 
@@ -42,6 +42,9 @@ export const Form = () => {
   const [fileError, setFileError] = React.useState(false);
   const [file, setFile] = React.useState('');
   const [openModal, setOpenModal] = React.useState(false);
+  const [positions, setPositions] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [errorPositions, setErrorPositions] = React.useState('');
   const handleCloseModal = () => setOpenModal(false);
   const handleOpenModal = () => setOpenModal(true);
 
@@ -125,7 +128,7 @@ export const Form = () => {
     formData.append('phone', phone);
     formData.append('position_id', +position);
     formData.append('photo', file);
-    
+
     const isRegistered = await signUpUser(formData, token);
     console.log('isRegistered', isRegistered);
     if (isRegistered.ok) {
@@ -141,101 +144,114 @@ export const Form = () => {
 
   const theme = createTheme(themeTypography);
 
+  React.useEffect(() => {
+    async function fetchPositions() {
+      setIsLoading(true);
+      const { success, positions, messages } = await getPositions();
+      console.log('positions', positions);
+      if (success) {
+        setPositions(positions);
+      } else {
+        setErrorPositions(`${messages}`);
+      }
+      setIsLoading(false);
+    }
+    fetchPositions();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (errorPositions) {
+    return <div>Error: {errorPositions}</div>;
+  }
+
   return (
-    <><form className='form' onSubmit={handleSubmit}>
-      <h1 className='form__title'>Working with POST request</h1>
-      <ThemeProvider theme={theme}>
-        <Box sx={styledBox}>
-          <TextField
-            error={errorName}
-            fullWidth
-            label='Your name'
-            id='your name'
-            value={name}
-            helperText={errorName && 'Please enter a valid name'}
-            sx={styledTextFieldInput}
-            onChange={handleChangeName} />
-          <TextField
-            error={errorEmail}
-            fullWidth
-            label='Email'
-            id='email'
-            value={email}
-            sx={styledTextFieldInput}
-            helperText={errorEmail && 'Please enter a valid email'}
-            onChange={handleChangeEmail} />
-          <TextField
-            error={errorPhone}
-            fullWidth
-            label='Phone'
-            id='phone'
-            value={phone}
-            sx={styledTextFieldInputPhone}
-            onChange={handleChangePhone}
-            helperText={errorPhone ? 'Please enter a valid phone' : '+38 (XXX) XXX - XX - XX'} />
-          <div className='form__box-radio'>
-            <p className='form__subtitle'>Select your position</p>
-            <RadioGroup
-              aria-labelledby="demo-controlled-radio-buttons-group"
-              name="controlled-radio-buttons-group"
-              value={position}
-              onChange={handleChangePosition}
-              sx={styledRadioGroup}
-            >
-              <FormControlLabel
-                value='1'
-                control={<Radio style={styledRadio} />}
-                label='Frontend developer'
-                sx={styledFormControlLabel} />
-              <FormControlLabel
-                value='2'
-                control={<Radio style={styledRadio} />}
-                label='Backend developer'
-                sx={styledFormControlLabel} />
-              <FormControlLabel
-                value='4'
-                control={<Radio style={styledRadio} />}
-                label='Designer'
-                sx={styledFormControlLabel} />
-              <FormControlLabel
-                value='3'
-                control={<Radio style={styledRadio} />}
-                label='QA'
-                sx={styledFormControlLabelQa} />
-              <p className='form__error-radio'>{!position && 'Should choose a position!'}</p>
-            </RadioGroup>
-          </div>
-          <div className='form__box-upload'>
-            <div
-              id='file-upload'
-              className='form__button-upload'
-              onClick={handleClickChooseFile}
-            >
-              <span className='form__text-button'>Upload</span>
-              <input
-                id='file-input'
-                type='file'
-                accept=".jpg,.jpeg"
-                style={{ display: 'none' }}
-                onChange={handleFileInputChange} />
-            </div>
-            <StyledTextField
-              error={fileError}
+    <>
+      <form className='form' onSubmit={handleSubmit}>
+        <h1 className='form__title'>Working with POST request</h1>
+        <ThemeProvider theme={theme}>
+          <Box sx={styledBox}>
+            <TextField
+              error={errorName}
               fullWidth
-              label='Upload your photo'
-              disabled
-              value={fileName}
+              label='Your name'
+              id='your name'
+              value={name}
+              helperText={errorName && 'Please enter a valid name'}
+              sx={styledTextFieldInput}
+              onChange={handleChangeName} />
+            <TextField
+              error={errorEmail}
+              fullWidth
+              label='Email'
               id='email'
-              sx={styledFormControlLabelQa}
-              helperText={fileError && 'Minimum 70x70px.Format must be jpeg/jpg. Size must not be greater than 5 Mb.'} />
-          </div>
-          <Button
-            type="submit"
-            name="Sign up"
-            disabled={!allValuesAreValid} />
-        </Box>
-      </ThemeProvider>
-    </form>
+              value={email}
+              sx={styledTextFieldInput}
+              helperText={errorEmail && 'Please enter a valid email'}
+              onChange={handleChangeEmail} />
+            <TextField
+              error={errorPhone}
+              fullWidth
+              label='Phone'
+              id='phone'
+              value={phone}
+              sx={styledTextFieldInputPhone}
+              onChange={handleChangePhone}
+              helperText={errorPhone ? 'Please enter a valid phone' : '+38 (XXX) XXX - XX - XX'} />
+            <div className='form__box-radio'>
+              <p className='form__subtitle'>Select your position</p>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={position}
+                onChange={handleChangePosition}
+                sx={styledRadioGroup}
+              >
+                {!errorPositions && (
+                  positions.map(position => {
+                    return(
+                    <FormControlLabel
+                      value={position.id}
+                      control={<Radio style={styledRadio} />}
+                      label={position.name}
+                      sx={styledFormControlLabel} />
+                  )}))}
+                <p className='form__error-radio'>{!position && 'Should choose a position!'}</p>
+              </RadioGroup>
+            </div>
+            <div className='form__box-upload'>
+              <div
+                id='file-upload'
+                className='form__button-upload'
+                onClick={handleClickChooseFile}
+              >
+                <span className='form__text-button'>Upload</span>
+                <input
+                  id='file-input'
+                  type='file'
+                  accept=".jpg,.jpeg"
+                  style={{ display: 'none' }}
+                  onChange={handleFileInputChange} />
+              </div>
+              <StyledTextField
+                error={fileError}
+                fullWidth
+                label='Upload your photo'
+                disabled
+                value={fileName}
+                id='email'
+                sx={styledCustomTextField}
+                helperText={fileError && 'Minimum 70x70px.Format must be jpeg/jpg. Size must not be greater than 5 Mb.'} />
+            </div>
+            <Button
+              type="submit"
+              name="Sign up"
+              disabled={!allValuesAreValid} />
+          </Box>
+        </ThemeProvider>
+      </form>
       <div>
         {/* <Button onClick={handleOpenModal}>Open modal</Button> */}
         <Modal

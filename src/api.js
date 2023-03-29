@@ -1,6 +1,6 @@
 import { BASE_URL } from './consts/const';
 
-export async function getPeople(page = 1, count = 6) {
+export async function getPeople(page, count) {
   try {
     const response = await fetch(`${BASE_URL}/users?page=${page}&count=${count}`);
     const data = await response.json();
@@ -36,3 +36,13 @@ export async function signUpUser(formData, token) {
   return response;
 }
 
+export async function getPositions() {
+  try {
+    const response = await fetch(`${BASE_URL}/positions`);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    return `${error.message}`;
+  }
+}

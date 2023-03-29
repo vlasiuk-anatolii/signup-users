@@ -8,17 +8,36 @@ export const List = () => {
   const [people, setPeople] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const handleClickBtnShowMore = () => {
-    console.log('Button clicked!');
-  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [count] = useState(6);
+  const [totalPages, setTotalPages] = useState(null);
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+  console.log('currentPage', currentPage);
+  console.log('totalPages', totalPages);
+  async function handleClickBtnShowMore() {
+    if (currentPage === totalPages - 1) {
+      setIsButtonVisible(false);
+    }
+    setIsLoading(true);
+    const nextPage = currentPage + 1;
+    const { success, total_pages, users } = await getPeople(nextPage, count);
+    if (success) {
+      setPeople(users);
+      setTotalPages(total_pages);
+      setCurrentPage(nextPage);
+    } else {
+      setError('Something went wrong');
+    }
+    setIsLoading(false);
+  }
 
   useEffect(() => {
     async function fetchPeople() {
       setIsLoading(true);
-      const { success, users } = await getPeople();
+      const { success, total_pages, users } = await getPeople(currentPage, count);
       if (success) {
         setPeople(users);
+        setTotalPages(total_pages);
       } else {
         setError('Something went wrong');
       }
@@ -39,24 +58,26 @@ export const List = () => {
     <div className="list">
       <h1 className="list__title">Working with GET request</h1>
       <div className="list__box-cards">
-      {people.map(person =>
-        <Card
-          key={person.id}
-          image={person.photo}
-          name={person.name}
-          occupation={person.position}
-          email={person.email}
-          phone={person.phone}
-        />
-      
-      )}
+        {people.map(person =>
+          <Card
+            key={person.id}
+            image={person.photo}
+            name={person.name}
+            occupation={person.position}
+            email={person.email}
+            phone={person.phone}
+          />
+
+        )}
       </div >
-      <Button 
-        type='button'
-        onClick={handleClickBtnShowMore}
-        name='Show more'
-        width='120px'
-      />
+      {isButtonVisible && (
+        <Button
+          type='button'
+          onClick={handleClickBtnShowMore}
+          name='Show more'
+          width='120px'
+        />
+      )}
     </div>
   );
 };

@@ -50,7 +50,7 @@ export const styledFormControlLabel = {
   marginBottom: '10px',
 }
 
-export const styledFormControlLabelQa = {
+export const styledCustomTextField = {
   marginBottom: '50px',
 }
 
