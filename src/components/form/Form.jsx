@@ -4,10 +4,13 @@ import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
 import { Button } from '../button/Button';
 import { REGEX } from '../../consts/const';
+import { getToken, signUpUser } from '../../api';
 import {
   styledTextField,
   themeTypography,
@@ -17,7 +20,8 @@ import {
   styledRadioGroup,
   styledRadio,
   styledFormControlLabel,
-  styledFormControlLabelQa
+  styledFormControlLabelQa,
+  styledBoxModal
 } from './Form.styled'
 import './Form.scss';
 
@@ -25,7 +29,6 @@ function validateValue(value, str) {
   const re = new RegExp(str);
   return re.test(value);
 }
-
 
 export const Form = () => {
   const [position, setPosition] = React.useState('');
@@ -37,9 +40,13 @@ export const Form = () => {
   const [errorPhone, setErrorPhone] = React.useState(false);
   const [fileName, setFileName] = React.useState('');
   const [fileError, setFileError] = React.useState(false);
-  const [allValuesAreValid, setAllValuesAreValid] = React.useState(false);
+  const [file, setFile] = React.useState('');
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleCloseModal = () => setOpenModal(false);
+  const handleOpenModal = () => setOpenModal(true);
 
   const StyledTextField = styled(TextField)(styledTextField);
+
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -62,6 +69,7 @@ export const Form = () => {
         setFileError(true);
       } else {
         setFileName(file.name);
+        setFile(file);
         setFileError(false);
       }
     } else {
@@ -103,29 +111,38 @@ export const Form = () => {
       setErrorPhone(false);
     }
   }
-
-  const isAllValuesRight = () => {
-    if (email !== '' && name !== '' && phone !== '' && fileName !== '' && position !== '') {
-      setAllValuesAreValid(true);
-    }
-  }
-
+  const allValuesAreValid = email !== '' && name !== '' && phone !== '' && fileName !== '' && position !== '';
   const handleChangePosition = (event) => {
     setPosition(event.target.value);
   };
 
-  const handleClickBtnSignUp = () => {
-    console.log('Button clicked!');
-  };
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const token = await getToken();
+    let formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('phone', phone);
+    formData.append('position_id', +position);
+    formData.append('photo', file);
+    
+    const isRegistered = await signUpUser(formData, token);
+    console.log('isRegistered', isRegistered);
+    if (isRegistered.ok) {
+      handleOpenModal();
+      setPosition('');
+      setName('');
+      setEmail('');
+      setPhone('');
+      setFileName('');
+      setFile('');
+    }
+  }
 
   const theme = createTheme(themeTypography);
 
-  React.useEffect(() => {
-    isAllValuesRight();
-  }, [position, errorEmail, errorName, errorPhone, fileError])
-
   return (
-    <form className='form'>
+    <><form className='form' onSubmit={handleSubmit}>
       <h1 className='form__title'>Working with POST request</h1>
       <ThemeProvider theme={theme}>
         <Box sx={styledBox}>
@@ -137,8 +154,7 @@ export const Form = () => {
             value={name}
             helperText={errorName && 'Please enter a valid name'}
             sx={styledTextFieldInput}
-            onChange={handleChangeName}
-          />
+            onChange={handleChangeName} />
           <TextField
             error={errorEmail}
             fullWidth
@@ -147,8 +163,7 @@ export const Form = () => {
             value={email}
             sx={styledTextFieldInput}
             helperText={errorEmail && 'Please enter a valid email'}
-            onChange={handleChangeEmail}
-          />
+            onChange={handleChangeEmail} />
           <TextField
             error={errorPhone}
             fullWidth
@@ -157,8 +172,7 @@ export const Form = () => {
             value={phone}
             sx={styledTextFieldInputPhone}
             onChange={handleChangePhone}
-            helperText={errorPhone ? 'Please enter a valid phone' : '+38 (XXX) XXX - XX - XX'}
-          />
+            helperText={errorPhone ? 'Please enter a valid phone' : '+38 (XXX) XXX - XX - XX'} />
           <div className='form__box-radio'>
             <p className='form__subtitle'>Select your position</p>
             <RadioGroup
@@ -169,34 +183,30 @@ export const Form = () => {
               sx={styledRadioGroup}
             >
               <FormControlLabel
-                value='frontend developer'
+                value='1'
                 control={<Radio style={styledRadio} />}
                 label='Frontend developer'
-                sx={styledFormControlLabel}
-              />
+                sx={styledFormControlLabel} />
               <FormControlLabel
-                value='backend developer'
+                value='2'
                 control={<Radio style={styledRadio} />}
                 label='Backend developer'
-                sx={styledFormControlLabel}
-              />
+                sx={styledFormControlLabel} />
               <FormControlLabel
-                value='designer'
+                value='4'
                 control={<Radio style={styledRadio} />}
                 label='Designer'
-                sx={styledFormControlLabel}
-              />
+                sx={styledFormControlLabel} />
               <FormControlLabel
-                value='qa'
+                value='3'
                 control={<Radio style={styledRadio} />}
                 label='QA'
-                sx={styledFormControlLabelQa}
-              />
+                sx={styledFormControlLabelQa} />
               <p className='form__error-radio'>{!position && 'Should choose a position!'}</p>
             </RadioGroup>
           </div>
           <div className='form__box-upload'>
-            <div 
+            <div
               id='file-upload'
               className='form__button-upload'
               onClick={handleClickChooseFile}
@@ -207,59 +217,43 @@ export const Form = () => {
                 type='file'
                 accept=".jpg,.jpeg"
                 style={{ display: 'none' }}
-                onChange={handleFileInputChange}
-              />
+                onChange={handleFileInputChange} />
             </div>
-              <StyledTextField
-                error={fileError}
-                fullWidth
-                label='Upload your photo'
-                disabled
-                value={fileName}
-                id='email'
-                sx={styledFormControlLabelQa}
-                helperText={fileError && 'Minimum 70x70px.Format must be jpeg/jpg. Size must not be greater than 5 Mb.'}
-              />
+            <StyledTextField
+              error={fileError}
+              fullWidth
+              label='Upload your photo'
+              disabled
+              value={fileName}
+              id='email'
+              sx={styledFormControlLabelQa}
+              helperText={fileError && 'Minimum 70x70px.Format must be jpeg/jpg. Size must not be greater than 5 Mb.'} />
           </div>
           <Button
-            type="button"
-            onClick={handleClickBtnSignUp}
+            type="submit"
             name="Sign up"
-            disabled={!allValuesAreValid}
-          />
+            disabled={!allValuesAreValid} />
         </Box>
       </ThemeProvider>
     </form>
+      <div>
+        {/* <Button onClick={handleOpenModal}>Open modal</Button> */}
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={styledBoxModal}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Modal>
+      </div>
+    </>
   );
 };
-
-
-// const [people, setPeople] = useState([]);
-// const [isLoading, setIsLoading] = useState(true);
-// const [error, setError] = useState(null);
-
-// const handleClickBtnShowMore = () => {
-//   console.log('Button clicked!');
-// };
-
-// useEffect(() => {
-//   async function fetchPeople() {
-//     setIsLoading(true);
-//     const { success, users } = await getPeople();
-//     if (success) {
-//       setPeople(users);
-//     } else {
-//       setError('Something went wrong');
-//     }
-//     setIsLoading(false);
-//   }
-//   fetchPeople();
-// }, []);
-
-// if (isLoading) {
-//   return <div>Loading...</div>;
-// }
-
-// if (error) {
-//   return <div>Error: {error}</div>;
-// }
