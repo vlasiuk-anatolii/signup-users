@@ -32,6 +32,9 @@
     font-weight: 400;
     color: $card-text-color;;
     margin: 0;
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__name {
