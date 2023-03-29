@@ -151,7 +151,6 @@ export const Form = ({ setIsRegistered, elementRef }) => {
     async function fetchPositions() {
       setIsLoading(true);
       const { success, positions, messages } = await getPositions();
-      console.log('positions', positions);
       if (success) {
         setPositions(positions);
       } else {
@@ -210,6 +209,7 @@ export const Form = ({ setIsRegistered, elementRef }) => {
                   positions.map(position => {
                     return (
                       <FormControlLabel
+                        key={position.id}
                         value={position.id}
                         control={<Radio style={styledRadio} />}
                         label={position.name}
