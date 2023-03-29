@@ -3,6 +3,7 @@ import './List.scss';
 import { Card } from '../card/Card';
 import { Button } from '../button/Button';
 import { getPeople } from '../../api';
+import { Loader } from '../loader/Loader';
 import PropTypes from 'prop-types';
 
 export const List = ({ isRegistered }) => {
@@ -46,7 +47,7 @@ export const List = ({ isRegistered }) => {
   }, [isRegistered]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div><Loader /></div>;
   }
 
   if (error) {

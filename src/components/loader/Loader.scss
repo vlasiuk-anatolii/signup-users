@@ -1,0 +1,26 @@
+@import '../../variables.scss';
+.loader {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  &__content {
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
+    margin: 1em auto;
+    border: 0.3em solid $secondary-color;
+    border-left-color: $background-color-header;
+    animation: load8 $transition-duration infinite linear;
+  }
+}
+
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
