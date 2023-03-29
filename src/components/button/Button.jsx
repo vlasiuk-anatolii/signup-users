@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import './Button.scss';
 
 export const Button = (props) => {
-  const { type = 'button', onClick, name = 'Button', width = '100px', disabled = false } = props;
+  const {
+    type = 'button',
+    onClick, name = 'Button',
+    width = '100px',
+    disabled = false
+  } = props;
   const buttonStyle = { width };
   return (
     <button

@@ -44,14 +44,14 @@ export const List = ({ isRegistered, elementRefList }) => {
       }
       setIsLoading(false);
     }
-   fetchPeople();
+    fetchPeople();
   }, [isRegistered]);
 
   return (
     <div ref={elementRefList} className="list">
       <h1 className="list__title">Working with GET request</h1>
-      { isLoading && <Loader /> }
-      { error && <div>Error: {error}</div> }
+      {isLoading && <Loader />}
+      {error && <div>Error: {error}</div>}
       <div className="list__box-cards">
         {people.map(person =>
           <Card

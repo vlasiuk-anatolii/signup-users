@@ -166,8 +166,8 @@ export const Form = ({ setIsRegistered, elementRef }) => {
     <>
       <form ref={elementRef} className='form' onSubmit={handleSubmit}>
         <h1 className='form__title'>Working with POST request</h1>
-        { isLoading && <Loader /> }
-        { errorPositions && <div>Error: {errorPositions}</div> }
+        {isLoading && <Loader />}
+        {errorPositions && <div>Error: {errorPositions}</div>}
         <ThemeProvider theme={theme}>
           <Box sx={styledBox}>
             <TextField
