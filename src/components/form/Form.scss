@@ -39,8 +39,12 @@
   &__box-upload {
     display: flex;
   }
-  
+
   &__text-button {
     line-height: 54px;
+  }
+
+  &__error-radio {
+    color: $error;
   }
 }
